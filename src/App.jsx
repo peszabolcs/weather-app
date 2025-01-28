@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react"
 import { Search, Cloud, Sun, Droplet, Wind } from "lucide-react"
+import "./index.css"
 
 
 const WeatherApp = () => {
