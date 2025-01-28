@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react"
-import { Search, Cloud, Sun, Droplet, Wind, CloudRain, CloudSun, CloudRainWind, CloudLightning, CloudSnow,  CloudFog,  MoonStar } from "lucide-react"
+import { Search, Cloud, Sun, Droplet, Wind, CloudRain, CloudLightning, CloudSnow,  CloudFog,  MoonStar } from "lucide-react"
 import "./index.css"
 import { Dialog, DialogContent, DialogDescription, DialogTitle} from "/src/components/components/ui/Dialog.jsx"
 
@@ -89,7 +89,7 @@ const WeatherApp = () => {
   }
 
   return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center flex-col px-4">
         <div className="rounded-3xl p-8 max-w-md w-full shadow-lg">
           <form onSubmit={handleSubmit} className="mb-6">
             <div className="relative">
@@ -136,7 +136,11 @@ const WeatherApp = () => {
             <button onClick={closeErrorModal}>Rendben</button>
           </DialogContent>
         </Dialog>
+        <div className="mt-12 sm:mt-16 md:mt-24 text-center text-xs sm:text-sm text-white/60">
+          © {new Date().getFullYear()} Perjési Szabolcs. Minden jog fenntartva.
+        </div>
       </div>
+
 
   )
 }
