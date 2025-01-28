@@ -2,6 +2,7 @@ import {useEffect, useState} from "react"
 import { Search, Cloud, Sun, Droplet, Wind } from "lucide-react"
 import "./index.css"
 import { Dialog, DialogContent, DialogDescription, DialogTitle} from "/src/components/components/ui/Dialog.jsx"
+import "./App.css"
 
 
 const WeatherApp = () => {
@@ -66,7 +67,7 @@ const WeatherApp = () => {
 
   return (
       <div className="min-h-screen bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center px-4">
-        <div className="bg-white/20 backdrop-blur-lg rounded-3xl p-8 max-w-md w-full shadow-lg">
+        <div className="rounded-3xl p-8 max-w-md w-full shadow-lg">
           <form onSubmit={handleSubmit} className="mb-6">
             <div className="relative">
               <input
@@ -74,7 +75,7 @@ const WeatherApp = () => {
                   value={city}
                   onChange={handleCityChange}
                   placeholder="Adja meg a város nevét"
-                  className="w-full py-3 px-4 pr-12 rounded-full bg-white/20 backdrop-blur-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
+                  className="w-full py-3 px-4 pr-12 rounded-full bg-custom text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
               />
               <button type="submit" className="absolute right-3 top-1/2 transform -translate-y-1/2">
                 <Search className="text-white" size={20} />
@@ -94,11 +95,11 @@ const WeatherApp = () => {
             </div>
             <p className="text-xl text-white mb-6">{weatherDescription}</p>
             <div className="grid grid-cols-2 gap-4">
-              <div className="flex items-center justify-center bg-white/20 backdrop-blur-md rounded-xl p-3">
+              <div className="flex items-center justify-center bg-custom rounded-xl p-3">
                 <Droplet className="text-blue-300 mr-2" size={24} />
                 <span className="text-white">{humidity}%</span>
               </div>
-              <div className="flex items-center justify-center bg-white/20 backdrop-blur-md rounded-xl p-3">
+              <div className="flex items-center justify-center bg-custom rounded-xl p-3">
                 <Wind className="text-gray-300 mr-2" size={24} />
                 <span className="text-white">{windSpeed} m/s</span>
               </div>

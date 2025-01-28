@@ -1,4 +1,9 @@
 /** @type {import('tailwindcss').Config} */
+import tailwindcssAnimate from "tailwindcss-animate";
+import forms from "@tailwindcss/forms";
+import typography from "@tailwindcss/typography";
+import aspectRatio from "@tailwindcss/aspect-ratio";
+
 export default {
     darkMode: ["class"],
     mode: "jit",
@@ -7,7 +12,7 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   safelist: [
-    "bg-red-500", "text-white", "p-4", "text-lg"
+    "bg-red-500", "text-white", "p-4", "text-lg", "backdrop-blur-md", "backdrop-blur-lg", "bg-white/20, bg-custom"
   ],
   theme: {
   	extend: {
@@ -60,5 +65,10 @@ export default {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+	  tailwindcssAnimate,
+	  forms,
+	  typography,
+	  aspectRatio,
+  ],
 };

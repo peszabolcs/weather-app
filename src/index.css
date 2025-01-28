@@ -65,3 +65,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .bg-custom {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 1rem;
+    border:none;
+    -webkit-backdrop-filter: blur(20px) !important;
+    backdrop-filter: blur(20px) !important;
+    will-change: backdrop-filter;
+  }
+}
