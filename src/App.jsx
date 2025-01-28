@@ -1,47 +1,43 @@
 import {useEffect, useState} from "react"
 import { Search, Cloud, Sun, Droplet, Wind } from "lucide-react"
 import "./index.css"
+import { Dialog, DialogContent, DialogDescription, DialogTitle} from "/src/components/components/ui/Dialog.jsx"
 
 
 const WeatherApp = () => {
   const [weatherData, setWeatherData] = useState({
-    main: {
-      temp: null,
-      feels_like: null,
-      humidity: null,
-    },
-    wind: {
-      speed: null,
-    },
+    main: { temp: null, feels_like: null, humidity: null },
+    wind: { speed: null },
     name: "",
-    weather: [
-      {
-        description: "",
-      }
-    ],
+    weather: [{ description: "", }],
   });
   const [error, setError] = useState(null);
   const [city, setCity] = useState("Budapest");
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
   useEffect(() => {
     fetchWeatherData(city);
   }, []);
 
-  if (error) {
-    return <div>Hiba történt: {error.message}</div>
-  }
-
   const fetchWeatherData = async (city) => {
-    const apiKey = import.meta.env.VITE_REACT_APP_API_KEY;
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=hu`);
+    try {
+      const apiKey = import.meta.env.VITE_REACT_APP_API_KEY
+      const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=hu`,
+      )
 
-    if (!response.ok) {
-      throw new Error("Hiba a város lekérdezésekor");
+      if (!response.ok) {
+        throw new Error("Hiba a város lekérdezésekor")
+      }
+
+      const data = await response.json()
+      setWeatherData(data)
+      setError(null)
+    } catch (err) {
+      setError(err)
+      setIsErrorModalOpen(true)
     }
-
-    const data = await response.json();
-    setWeatherData(data);
-  };
+  }
 
   const handleCityChange = (event) => {
     setCity(event.target.value)
@@ -52,6 +48,10 @@ const WeatherApp = () => {
     console.log("Város keresése:", city)
     fetchWeatherData(city);
     setCity(city);
+  }
+
+  const closeErrorModal = () => {
+    setIsErrorModalOpen(false)
   }
 
   const temperature = weatherData?.main?.temp;
@@ -102,8 +102,20 @@ const WeatherApp = () => {
             </div>
           </div>
         </div>
+
+        <Dialog open={isErrorModalOpen} onOpenChange={setIsErrorModalOpen}>
+          <DialogContent>
+            <DialogTitle>Hiba történt</DialogTitle>
+            <DialogDescription>
+              {"Nem sikerült lekérdezni az időjárási adatokat. Kérjük, ellenőrizze a város nevét, és" +
+                  " próbálja újra."}
+            </DialogDescription>
+            <button onClick={closeErrorModal}>Rendben</button>
+          </DialogContent>
+        </Dialog>
       </div>
-  );
-};
+
+  )
+}
 
 export default WeatherApp;
