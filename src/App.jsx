@@ -1,14 +1,42 @@
-import React, { useState } from "react"
+import React, {useState} from "react"
 import { Search, Cloud, Sun, Droplet, Wind } from "lucide-react"
 
+
 const WeatherApp = () => {
-  const [city, setCity] = useState("Budapest")
-  const weatherData = {
-    temperature: 22,
-    description: "Napos",
-    humidity: 60,
-    windSpeed: 5,
+  const [weatherData, setWeatherData] = useState({
+    main: {
+      temp: null,
+      feels_like: null,
+      humidity: null,
+    },
+    wind: {
+      speed: null,
+    },
+    name: "",
+    weather: [
+      {
+        description: "",
+      }
+    ],
+  });
+  const [error, setError] = useState(null);
+  const [city, setCity] = useState("Budapest");
+
+  if (error) {
+    return <div>Hiba történt: {error.message}</div>
   }
+
+  const fetchWeatherData = async (city) => {
+    const apiKey = import.meta.env.VITE_REACT_APP_API_KEY;
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
+
+    if (!response.ok) {
+      throw new Error("Hiba a város lekérdezésekor");
+    }
+
+    const data = await response.json();
+    setWeatherData(data);
+  };
 
   const handleCityChange = (event) => {
     setCity(event.target.value)
@@ -17,7 +45,16 @@ const WeatherApp = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
     console.log("Város keresése:", city)
+    fetchWeatherData(city).then(r => console.log(r)).catch(e => setError(e));
+    setCity(city);
   }
+
+  const temperature = weatherData?.main?.temp;
+  // const feelsLike = weatherData?.main?.feels_like;
+  const humidity = weatherData?.main?.humidity;
+  const windSpeed = weatherData?.wind?.speed;
+  // const locationName = weatherData?.name;
+  const weatherDescription = weatherData?.weather?.[0]?.description;
 
   return (
       <div className="min-h-screen bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center px-4">
@@ -40,28 +77,28 @@ const WeatherApp = () => {
           <div className="text-center">
             <h2 className="text-4xl font-bold text-white mb-4">{city}</h2>
             <div className="flex justify-center items-center mb-6">
-              {weatherData.description.toLowerCase().includes("napos") ? (
+              {weatherDescription?.toLowerCase().includes("napos") ? (
                   <Sun className="text-yellow-300" size={64} />
               ) : (
                   <Cloud className="text-white" size={64} />
               )}
-              <span className="text-6xl font-bold text-white ml-4">{weatherData.temperature}°C</span>
+              <span className="text-6xl font-bold text-white ml-4">{temperature}°C</span>
             </div>
-            <p className="text-xl text-white mb-6">{weatherData.description}</p>
+            <p className="text-xl text-white mb-6">{weatherDescription}</p>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center justify-center bg-white/20 backdrop-blur-md rounded-xl p-3">
                 <Droplet className="text-blue-300 mr-2" size={24} />
-                <span className="text-white">{weatherData.humidity}%</span>
+                <span className="text-white">{humidity}%</span>
               </div>
               <div className="flex items-center justify-center bg-white/20 backdrop-blur-md rounded-xl p-3">
                 <Wind className="text-gray-300 mr-2" size={24} />
-                <span className="text-white">{weatherData.windSpeed} m/s</span>
+                <span className="text-white">{windSpeed} m/s</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-  )
-}
+  );
+};
 
-export default WeatherApp
+export default WeatherApp;
