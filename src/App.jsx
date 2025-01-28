@@ -14,10 +14,11 @@ const WeatherApp = () => {
   const [error, setError] = useState(null);
   const [city, setCity] = useState("Budapest");
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [displayCity, setDisplayCity] = useState("Budapest");
 
   useEffect(() => {
-    fetchWeatherData(city);
-  }, []);
+    fetchWeatherData(displayCity);
+  }, [displayCity]);
 
   const fetchWeatherData = async (city) => {
     try {
@@ -33,9 +34,11 @@ const WeatherApp = () => {
       const data = await response.json()
       setWeatherData(data)
       setError(null)
+      return true;
     } catch (err) {
       setError(err)
       setIsErrorModalOpen(true)
+      return false;
     }
   }
 
@@ -43,11 +46,13 @@ const WeatherApp = () => {
     setCity(event.target.value)
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     console.log("Város keresése:", city)
-    fetchWeatherData(city);
-    setCity(city);
+    const  isSuccess = await fetchWeatherData(city);
+    if (isSuccess) {
+      setDisplayCity(city)
+    }
   }
 
   const closeErrorModal = () => {
@@ -55,10 +60,8 @@ const WeatherApp = () => {
   }
 
   const temperature = weatherData?.main?.temp;
-  // const feelsLike = weatherData?.main?.feels_like;
   const humidity = weatherData?.main?.humidity;
   const windSpeed = weatherData?.wind?.speed;
-  // const locationName = weatherData?.name;
   const weatherDescription = weatherData?.weather?.[0]?.description;
 
   return (
@@ -80,7 +83,7 @@ const WeatherApp = () => {
           </form>
 
           <div className="text-center">
-            <h2 className="text-4xl font-bold text-white mb-4">{city}</h2>
+            <h2 className="text-4xl font-bold text-white mb-4">{displayCity}</h2>
             <div className="flex justify-center items-center mb-6">
               {weatherDescription?.toLowerCase().includes("napos") ? (
                   <Sun className="text-yellow-300" size={64} />
