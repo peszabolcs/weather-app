@@ -2,7 +2,6 @@ import {useEffect, useState} from "react"
 import { Search, Cloud, Sun, Droplet, Wind } from "lucide-react"
 import "./index.css"
 import { Dialog, DialogContent, DialogDescription, DialogTitle} from "/src/components/components/ui/Dialog.jsx"
-import "./App.css"
 
 
 const WeatherApp = () => {
