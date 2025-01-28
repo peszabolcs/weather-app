@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react"
-import { Search, Cloud, Sun, Droplet, Wind } from "lucide-react"
+import { Search, Cloud, Sun, Droplet, Wind, CloudRain, CloudSun, CloudRainWind, CloudLightning, CloudSnow,  CloudFog,  MoonStar } from "lucide-react"
 import "./index.css"
 import { Dialog, DialogContent, DialogDescription, DialogTitle} from "/src/components/components/ui/Dialog.jsx"
 
@@ -64,6 +64,30 @@ const WeatherApp = () => {
   const windSpeed = weatherData?.wind?.speed;
   const weatherDescription = weatherData?.weather?.[0]?.description;
 
+  const getWeatherIcon = () => {
+    const description = weatherDescription.toLowerCase();
+    const localTime = new Date(Date.now() + weatherData.timezone * 1000);
+    const currentHour = localTime.getUTCHours();
+    const isNight = currentHour >= 20 || currentHour < 6;
+
+    if (description.includes("tiszta")) {
+      return isNight ? <MoonStar className="text-blue-300" size={64} /> : <Sun className="text-yellow-300" size={64} />;
+    } else if (description.includes("felhős") || description.includes("borús") || description.includes("erős" +
+        " felhőzet")) {
+      return <Cloud className="text-gray-300" size={64} />;
+    } else if (description.includes("enyhe") || description.includes("szitálás")) {
+      return <CloudRain className="text-blue-400" size={64} />;
+    } else if (description.includes("zivatar") || description.includes("vihar") || description.includes("dörög") || description.includes("heves intenzitású")) {
+        return <CloudLightning className="text-yellow-500" size={64} />;
+    } else if (description.includes("havazás") || description.includes("havas") || description.includes("havazik") || description.includes("hó")) {
+        return <CloudSnow className="text-white" size={64} />;
+    } else if (description.includes("köd") || description.includes("párás") || description.includes("ködös")) {
+        return <CloudFog className="text-gray-300" size={64} />;
+    } else {
+        return <Cloud className="text-gray-300" size={64} />;
+    }
+  }
+
   return (
       <div className="min-h-screen bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center px-4">
         <div className="rounded-3xl p-8 max-w-md w-full shadow-lg">
@@ -85,11 +109,7 @@ const WeatherApp = () => {
           <div className="text-center">
             <h2 className="text-4xl font-bold text-white mb-4">{displayCity}</h2>
             <div className="flex justify-center items-center mb-6">
-              {weatherDescription?.toLowerCase().includes("napos") ? (
-                  <Sun className="text-yellow-300" size={64} />
-              ) : (
-                  <Cloud className="text-white" size={64} />
-              )}
+              {getWeatherIcon()}
               <span className="text-6xl font-bold text-white ml-4">{Math.round(temperature)}°C</span>
             </div>
             <p className="text-xl text-white mb-6">{weatherDescription}</p>
