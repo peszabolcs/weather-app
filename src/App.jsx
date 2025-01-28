@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import {useEffect, useState} from "react"
 import { Search, Cloud, Sun, Droplet, Wind } from "lucide-react"
 
 
@@ -22,13 +22,17 @@ const WeatherApp = () => {
   const [error, setError] = useState(null);
   const [city, setCity] = useState("Budapest");
 
+  useEffect(() => {
+    fetchWeatherData(city);
+  }, []);
+
   if (error) {
     return <div>Hiba történt: {error.message}</div>
   }
 
   const fetchWeatherData = async (city) => {
     const apiKey = import.meta.env.VITE_REACT_APP_API_KEY;
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=hu`);
 
     if (!response.ok) {
       throw new Error("Hiba a város lekérdezésekor");
@@ -45,7 +49,7 @@ const WeatherApp = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
     console.log("Város keresése:", city)
-    fetchWeatherData(city).then(r => console.log(r)).catch(e => setError(e));
+    fetchWeatherData(city);
     setCity(city);
   }
 
@@ -82,7 +86,7 @@ const WeatherApp = () => {
               ) : (
                   <Cloud className="text-white" size={64} />
               )}
-              <span className="text-6xl font-bold text-white ml-4">{temperature}°C</span>
+              <span className="text-6xl font-bold text-white ml-4">{Math.round(temperature)}°C</span>
             </div>
             <p className="text-xl text-white mb-6">{weatherDescription}</p>
             <div className="grid grid-cols-2 gap-4">
