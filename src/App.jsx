@@ -60,7 +60,7 @@ const WeatherApp = () => {
   }
 
   const temperature = weatherData?.main?.temp;
-  const humidity = weatherData?.main?.humidity;
+  const rain = weatherData?.rain?.["1h"];
   const windSpeed = weatherData?.wind?.speed;
   const weatherDescription = weatherData?.weather?.[0]?.description;
 
@@ -116,7 +116,7 @@ const WeatherApp = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center justify-center bg-custom rounded-xl p-3">
                 <Droplet className="text-blue-300 mr-2" size={24} />
-                <span className="text-white">{humidity}%</span>
+                <span className="text-white">{rain}%</span>
               </div>
               <div className="flex items-center justify-center bg-custom rounded-xl p-3">
                 <Wind className="text-gray-300 mr-2" size={24} />
