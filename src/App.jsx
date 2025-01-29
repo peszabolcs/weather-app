@@ -64,6 +64,8 @@ const WeatherApp = () => {
   const windSpeed = weatherData?.wind?.speed;
   const weatherDescription = weatherData?.weather?.[0]?.description;
 
+
+
   const getWeatherIcon = () => {
     const description = weatherDescription.toLowerCase();
     const localTime = new Date(Date.now() + weatherData.timezone * 1000);
@@ -75,7 +77,7 @@ const WeatherApp = () => {
     } else if (description.includes("felhős") || description.includes("borús") || description.includes("erős" +
         " felhőzet")) {
       return <Cloud className="text-gray-300" size={64} />;
-    } else if (description.includes("enyhe") || description.includes("szitálás")) {
+    } else if (description.includes("enyhe") || description.includes("szitálás") || description.includes("közepes")) {
       return <CloudRain className="text-blue-400" size={64} />;
     } else if (description.includes("zivatar") || description.includes("vihar") || description.includes("dörög") || description.includes("heves intenzitású")) {
         return <CloudLightning className="text-yellow-500" size={64} />;
@@ -116,7 +118,7 @@ const WeatherApp = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center justify-center bg-custom rounded-xl p-3">
                 <Droplet className="text-blue-300 mr-2" size={24} />
-                <span className="text-white">{rain}%</span>
+                <span className="text-white">{rain > 0 ? rain : 0} mm/h</span>
               </div>
               <div className="flex items-center justify-center bg-custom rounded-xl p-3">
                 <Wind className="text-gray-300 mr-2" size={24} />
